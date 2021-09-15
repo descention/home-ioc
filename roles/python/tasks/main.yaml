@@ -1,0 +1,27 @@
+---
+- name: check for pip
+  shell: ls /var/packages/py3k/target/usr/local/bin/pip3
+  changed_when: false
+  failed_when: '"No such file or directory" in pip_installed.stdout'
+  register: pip_installed
+
+- name: Download pip installer
+  become: yes
+  get_url:
+    url: https://bootstrap.pypa.io/get-pip.py
+    dest: /tmp/get-pip.py
+  when: pip_installed.rc != 0
+
+- name: Install pip
+  become: yes
+  command: "{{ansible_python_interpreter}} /tmp/get-pip.py"
+  when: pip_installed.rc != 0
+
+- name: Install pip dependencies
+  become: yes
+  pip: 
+    executable: /var/packages/py3k/target/usr/local/bin/pip3
+    name: "{{ item }}"
+  with_items:
+    - docker
+  when: pip_installed.rc != 0

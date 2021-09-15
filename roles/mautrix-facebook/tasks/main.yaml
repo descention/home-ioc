@@ -1,0 +1,14 @@
+---
+- name: Matrix Facebook Bridge container
+  become: true
+  docker_container:
+    name: mautrix-facebook
+    image: dock.mau.dev/mautrix/facebook:latest
+    state: started
+    restart_policy: unless-stopped
+    volumes:
+      - "{{ docker_data_base }}/matrix/mautrix-facebook:/data"
+    networks:
+      - name: bridge
+      - name: matrix
+    network_mode: bridge

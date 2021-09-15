@@ -1,0 +1,9 @@
+---
+- name: Provision synology
+  hosts: nas
+  vars_files:
+    - ./vars/vault.yaml
+  roles:
+    - python
+    - portainer
+    # - mautrix-facebook

@@ -1,0 +1,13 @@
+---
+- name: Portainer container
+  become: true
+  docker_container:
+    name: portainer
+    image: portainer/portainer-ce
+    state: started
+    restart_policy: unless-stopped
+    published_ports:
+        - "9000:9000"
+    volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - "{{docker_data_base}}/portainer:/data"
