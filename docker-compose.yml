@@ -14,7 +14,7 @@ services:
       - "--providers.docker.watch=true"
       - "--providers.docker.network=web"
       - "--providers.docker.exposedbydefault=false"
-      - "--providers.docker.defaultrule=Host(`{{ normalize .Name }}.descention.net`)"
+      - "--providers.docker.defaultrule=Host(`{{ index .Labels \"com.docker.compose.service\" }}.descention.net`)"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
       - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
