@@ -21,7 +21,7 @@ services:
       - "--entrypoints.websecure.http.tls.certResolver=letsencrypt"
       - "--entrypoints.traefik.address=:8080"
       - "--certificatesresolvers.letsencrypt.acme.email=scott.mundorff@gmail.com"
-      - "--certificatesresolvers.letsencrypt.acme.storage=acme.json"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/srv/acme.json"
       - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
       - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
       - "--log.level=info"
@@ -35,7 +35,7 @@ services:
       - 8080:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /volume1/docker/traefik/acme.json:/acme.json
+      - /volume1/docker/traefik/ssl:/srv
   code:
     image: gitpod/openvscode-server:latest
     volumes:
