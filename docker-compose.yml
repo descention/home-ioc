@@ -1,0 +1,64 @@
+version: "2"
+
+secrets:
+  foundry_secrets:
+    file: /volume1/docker/foundry.secrets.json
+
+services:
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.watch=true"
+      - "--providers.docker.network=web"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.defaultrule=Host(`{{ normalize .Name }}.descention.net`)"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.websecure.http.tls.certResolver=letsencrypt"
+      - "--entrypoints.traefik.address=:8080"
+      - "--certificatesresolvers.letsencrypt.acme.email=scott.mundorff@gmail.com"
+      - "--certificatesresolvers.letsencrypt.acme.storage=acme.json"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - 80:80
+      - 443:443
+      - 8080:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+  code:
+    image: gitpod/openvscode-server:latest
+    volumes:
+      - /volume1/homes/scott/Source:/home/workspace:cached
+    labels:
+      - "traefik.enable=true"
+  foundry:
+    image: felddy/foundryvtt:0.8
+    environment:
+      - CONTAINER_CACHE=/data/container_cache
+      - FOUNDRY_HOME=/home/foundry
+      - FOUNDRY_HOSTNAME=foundry.descention.net
+    volumes:
+      - /volume1/docker/foundry-0.8:/data
+    labels:
+      - "traefik.enable=true"
+    secrets:
+      - source: foundry_secrets
+        target: config.json
+  vault:
+    image: vaultwarden/server:latest
+    environment:
+      - SIGNUPS_ALLOWED=false
+      - SIGNUPS_VERIFY=true
+    volumes:
+      - /volume1/docker/vaultwarden-server:/data
+    labels:
+      - "traefik.enable=true"
