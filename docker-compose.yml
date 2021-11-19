@@ -55,6 +55,18 @@ services:
     secrets:
       - source: foundry_secrets
         target: config.json
+  git:
+    image: gitea/gitea:1.15.6
+    container_name: git
+    environment:
+      - USER_UID=1026
+      - USER_GID=100
+    volumes:
+      - /volume1/docker/gitea:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "3000:3000"
   vault:
     image: vaultwarden/server:latest
     environment:
