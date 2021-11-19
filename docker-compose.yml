@@ -92,6 +92,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
     labels:
       - "traefik.enable=true"
+      - "traefik.http.services.git.loadbalancer.server.port=3000" # set port assignment
   vault:
     image: vaultwarden/server:latest
     container_name: vaultwarden
