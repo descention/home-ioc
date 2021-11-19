@@ -36,9 +36,9 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /volume1/docker/traefik/ssl:/srv
-  vscode:
+  code:
     image: gitpod/openvscode-server:latest
-    container_name: code
+    container_name: vscode
     volumes:
       - /volume1/homes/scott/Source:/home/workspace:cached
     labels:
@@ -57,10 +57,10 @@ services:
     secrets:
       - source: foundry_secrets
         target: config.json
-  mealie:
+  cookbook:
     image: hkotel/mealie:latest
     restart: always
-    container_name: cookbook
+    container_name: mealie
     environment:
       PUID: 1026
       PGID: 100
@@ -81,9 +81,9 @@ services:
       - /etc/localtime:/etc/localtime:ro
     labels:
       - "traefik.enable=true"
-  gitea:
+  git:
     image: gitea/gitea:1.15.6
-    container_name: git
+    container_name: gitea
     environment:
       - USER_UID=1026
       - USER_GID=100
@@ -95,9 +95,9 @@ services:
       - "3000:3000"
     labels:
       - "traefik.enable=true"
-  vaultwarden:
+  vault:
     image: vaultwarden/server:latest
-    container_name: vault
+    container_name: vaultwarden
     environment:
       - SIGNUPS_ALLOWED=false
       - SIGNUPS_VERIFY=true
