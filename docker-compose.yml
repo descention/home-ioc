@@ -90,8 +90,6 @@ services:
     volumes:
       - /volume1/docker/gitea:/data
       - /etc/localtime:/etc/localtime:ro
-    ports:
-      - "3000:3000"
     labels:
       - "traefik.enable=true"
   vault:
