@@ -36,14 +36,16 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /volume1/docker/traefik/ssl:/srv
-  code:
+  vscode:
     image: gitpod/openvscode-server:latest
+    container_name: code
     volumes:
       - /volume1/homes/scott/Source:/home/workspace:cached
     labels:
       - "traefik.enable=true"
   foundry:
     image: felddy/foundryvtt:0.8
+    container_name: foundry
     environment:
       - CONTAINER_CACHE=/data/container_cache
       - FOUNDRY_HOME=/home/foundry
@@ -55,7 +57,31 @@ services:
     secrets:
       - source: foundry_secrets
         target: config.json
-  git:
+  mealie:
+    image: hkotel/mealie:latest
+    restart: always
+    container_name: cookbook
+    environment:
+      PUID: 1026
+      PGID: 100
+      TZ: America/New_York
+      # Default Recipe Settings
+      RECIPE_PUBLIC: 'true'
+      RECIPE_SHOW_NUTRITION: 'true'
+      RECIPE_SHOW_ASSETS: 'true'
+      RECIPE_LANDSCAPE_VIEW: 'true'
+      RECIPE_DISABLE_COMMENTS: 'true'
+      RECIPE_DISABLE_AMOUNT: 'false'
+      # Gunicorn
+      WEB_CONCURRENCY: 2
+      # WORKERS_PER_CORE: 0.5
+      MAX_WORKERS: 4
+    volumes:
+      - /volume1/docker/mealie:/app/data
+      - /etc/localtime:/etc/localtime:ro
+    labels:
+      - "traefik.enable=true"
+  gitea:
     image: gitea/gitea:1.15.6
     container_name: git
     environment:
@@ -67,8 +93,11 @@ services:
       - /etc/localtime:/etc/localtime:ro
     ports:
       - "3000:3000"
-  vault:
+    labels:
+      - "traefik.enable=true"
+  vaultwarden:
     image: vaultwarden/server:latest
+    container_name: vault
     environment:
       - SIGNUPS_ALLOWED=false
       - SIGNUPS_VERIFY=true
