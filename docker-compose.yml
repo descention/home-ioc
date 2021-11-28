@@ -87,8 +87,8 @@ services:
     restart: always
     network_mode: host
     environment:
-      - PGID=1001
-      - PUID=100
+      - PGID=100
+      - PUID=1026
       - HOMEBRIDGE_CONFIG_UI=1
       - HOMEBRIDGE_CONFIG_UI_PORT=8581
     volumes:
