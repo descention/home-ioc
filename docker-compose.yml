@@ -82,6 +82,18 @@ services:
       - /etc/localtime:/etc/localtime:ro
     labels:
       - "traefik.enable=true"
+  homebridge:
+    image: oznu/homebridge:ubuntu
+    restart: always
+    network_mode: host
+    environment:
+      - PGID=1001
+      - PUID=100
+      - HOMEBRIDGE_CONFIG_UI=1
+      - HOMEBRIDGE_CONFIG_UI_PORT=8581
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /volume1/docker/homebridge:/homebridge
   git:
     image: gitea/gitea:1.15.6
     container_name: gitea
