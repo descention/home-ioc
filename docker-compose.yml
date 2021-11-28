@@ -129,6 +129,8 @@ services:
     container_name: yacy
     volumes:
       - /volume1/docker/yacy:/opt/yacy_search_server/DATA
+    ports:
+      - 8090:8090
     logging:
       options:
         max-size: "200m"
