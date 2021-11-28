@@ -131,7 +131,7 @@ services:
       - /volume1/docker/yacy:/opt/yacy_search_server/DATA
     labels:
       - "traefik.enable=true"
-      - "traefik.http.services.git.loadbalancer.server.port=8090" # set port assignment
+      - "traefik.http.services.yacy.loadbalancer.server.port=8090" # set port assignment
     logging:
       options:
         max-size: "200m"
