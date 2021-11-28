@@ -39,7 +39,7 @@ services:
   code:
     image: gitpod/openvscode-server:latest
     container_name: vscode
-    command: --connection-secret /volume1/docker/code.secret
+    command: --connection-secret /home/workspace/code.secret
     volumes:
       - /volume1/homes/scott/Source:/home/workspace:cached
     labels:
