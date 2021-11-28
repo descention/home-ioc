@@ -124,3 +124,12 @@ services:
     environment:
       - WATCHTOWER_CLEANUP=true
       - WATCHTOWER_ROLLING_RESTART=true
+  yacy:
+    image: yacy/yacy_search_server:latest
+    container_name: yacy
+    volumes:
+      - /volume1/docker/yacy:/opt/yacy_search_server/DATA
+    logging:
+      options:
+        max-size: "200m"
+        max-file: "2"
