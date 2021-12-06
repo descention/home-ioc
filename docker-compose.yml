@@ -112,6 +112,12 @@ services:
     environment:
       - SIGNUPS_ALLOWED=false
       - SIGNUPS_VERIFY=true
+      - SMTP_HOST=smtp.gmail.com
+      - SMTP_PORT=465
+      - SMTP_SSL=false
+      - SMTP_EXPLICIT_TLS=true
+      - SMTP_USERNAME=${VAULT_SMTP_USERNAME}
+      - SMTP_PASSWORD=${VAULT_SMTP_PASSWORD}
     volumes:
       - /volume1/docker/vaultwarden-server:/data
     labels:
@@ -136,3 +142,11 @@ services:
       options:
         max-size: "200m"
         max-file: "2"
+  cloudflare:
+    image: cloudflare/cloudflared:2021.11.0
+    container_name: cloudflared
+    volumes:
+      - /volume1/docker/cloudflared:/etc/cloudflared
+    command: tunnel --config /etc/cloudflared/config/config.yaml run
+    depends_on:
+      - traefik
