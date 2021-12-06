@@ -110,6 +110,7 @@ services:
     image: vaultwarden/server:latest
     container_name: vaultwarden
     environment:
+      - DOMAIN=https://vault.descention.net
       - SIGNUPS_ALLOWED=false
       - SIGNUPS_VERIFY=true
       - SMTP_HOST=smtp.gmail.com
