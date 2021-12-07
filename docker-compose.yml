@@ -5,6 +5,7 @@ secrets:
     file: /volume1/docker/foundry.secrets.json
 
 services:
+  # TODO: https://kevinquillen.com/setting-traefik-2-local-ssl-certificate
   traefik:
     image: traefik:latest
     container_name: traefik
