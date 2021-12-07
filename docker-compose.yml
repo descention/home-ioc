@@ -121,7 +121,7 @@ services:
       - SMTP_USERNAME=${VAULT_SMTP_USERNAME}
       - SMTP_PASSWORD=${VAULT_SMTP_PASSWORD}
       - SMTP_AUTH_MECHANISM=${VAULT_SMTP_AUTH_MECHANISM}
-      - ADMIN_TOKEN=${VAULT_ADMIN_TOKEN}
+      #- ADMIN_TOKEN=${VAULT_ADMIN_TOKEN}
     volumes:
       - /volume1/docker/vaultwarden-server:/data
     labels:
