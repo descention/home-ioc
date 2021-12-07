@@ -113,13 +113,14 @@ services:
       - DOMAIN=https://vault.descention.net
       - SIGNUPS_ALLOWED=false
       - SIGNUPS_VERIFY=true
-      - SMTP_HOST=smtp.gmail.com
+      - SMTP_HOST=${VAULT_SMTP_HOST}
       - SMTP_PORT=465
       - SMTP_SSL=false
       - SMTP_EXPLICIT_TLS=true
       - SMTP_FROM=${VAULT_SMTP_USERNAME}
       - SMTP_USERNAME=${VAULT_SMTP_USERNAME}
       - SMTP_PASSWORD=${VAULT_SMTP_PASSWORD}
+      - SMTP_AUTH_MECHANISM=${VAULT_SMTP_AUTH_MECHANISM}
       - ADMIN_TOKEN=${VAULT_ADMIN_TOKEN}
     volumes:
       - /volume1/docker/vaultwarden-server:/data
