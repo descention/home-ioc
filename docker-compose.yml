@@ -107,6 +107,11 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.git.loadbalancer.server.port=3000" # set port assignment
+  matrix:
+    image: vectorim/element-web:latest
+    container_name: element-web
+    labels:
+      - "traefik.enable=true"
   vault:
     image: vaultwarden/server:latest
     container_name: vaultwarden
