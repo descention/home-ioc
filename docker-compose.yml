@@ -45,20 +45,20 @@ services:
       - /volume1/homes/scott/Source:/home/workspace:cached
     labels:
       - "traefik.enable=true"
-  foundry:
-    image: felddy/foundryvtt:0.8
-    container_name: foundry
-    environment:
-      - CONTAINER_CACHE=/data/container_cache
-      - FOUNDRY_HOME=/home/foundry
-      - FOUNDRY_HOSTNAME=foundry.descention.net
-    volumes:
-      - /volume1/docker/foundry-0.8:/data
-    labels:
-      - "traefik.enable=true"
-    secrets:
-      - source: foundry_secrets
-        target: config.json
+  # foundry:
+  #   image: felddy/foundryvtt:0.8
+  #   container_name: foundry
+  #   environment:
+  #     - CONTAINER_CACHE=/data/container_cache
+  #     - FOUNDRY_HOME=/home/foundry
+  #     - FOUNDRY_HOSTNAME=foundry.descention.net
+  #   volumes:
+  #     - /volume1/docker/foundry-0.8:/data
+  #   labels:
+  #     - "traefik.enable=true"
+  #   secrets:
+  #     - source: foundry_secrets
+  #       target: config.json
   cookbook:
     image: hkotel/mealie:latest
     restart: always
