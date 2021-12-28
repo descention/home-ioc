@@ -58,6 +58,8 @@ services:
     #  - /volume1/docker/calibre/books:/books
       - /etc/localtime:/etc/localtime:ro
     restart: unless-stopped
+    ports:
+      - 8081:8081
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.calibre.loadbalancer.server.port=8081" # set port assignment
