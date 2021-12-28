@@ -46,19 +46,19 @@ services:
     labels:
       - "traefik.enable=true"
   calibre:
-    image: lscr.io/linuxserver/calibre
+    image: lscr.io/linuxserver/calibre-web
     container_name: calibre
     environment:
       - PUID=1026
       - PGID=100
       - TZ=America/New_York
+      - DOCKER_MODS=linuxserver/calibre-web:calibre
     volumes:
       - /volume1/docker/calibre/config:/config
       - /volume1/docker/calibre/books:/books
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.services.calibre.loadbalancer.server.port=8081" # set port assignment
   cookbook:
     image: hkotel/mealie:latest
     restart: always
