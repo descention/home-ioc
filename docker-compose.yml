@@ -58,6 +58,7 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
+      - "traefik.http.services.calibre.loadbalancer.server.port=8081" # set port assignment
   cookbook:
     image: hkotel/mealie:latest
     restart: always
