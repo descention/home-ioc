@@ -45,20 +45,20 @@ services:
       - /volume1/homes/scott/Source:/home/workspace:cached
     labels:
       - "traefik.enable=true"
-  # foundry:
-  #   image: felddy/foundryvtt:0.8
-  #   container_name: foundry
-  #   environment:
-  #     - CONTAINER_CACHE=/data/container_cache
-  #     - FOUNDRY_HOME=/home/foundry
-  #     - FOUNDRY_HOSTNAME=foundry.descention.net
-  #   volumes:
-  #     - /volume1/docker/foundry-0.8:/data
-  #   labels:
-  #     - "traefik.enable=true"
-  #   secrets:
-  #     - source: foundry_secrets
-  #       target: config.json
+  calibre:
+    image: ghcr.io/linuxserver/calibre-web
+    container_name: calibre
+    environment:
+      - PUID=1026
+      - PGID=100
+      - TZ=America/New_York
+      - DOCKER_MODS=linuxserver/calibre-web:calibre
+    volumes:
+      - /volume1/docker/calibre/config:/config
+      - /volume1/docker/calibre/books:/books
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
   cookbook:
     image: hkotel/mealie:latest
     restart: always
