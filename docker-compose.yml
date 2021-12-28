@@ -46,7 +46,7 @@ services:
     labels:
       - "traefik.enable=true"
   calibre:
-    image: lscr.io/linuxserver/calibre-web
+    image: linuxserver/calibre-web
     container_name: calibre
     environment:
       - PUID=1026
