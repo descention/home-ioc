@@ -1,10 +1,10 @@
 # You can pick any Debian/Ubuntu-based image. 😊
-FROM mcr.microsoft.com/vscode/devcontainers/base:0-buster
+FROM mcr.microsoft.com/vscode/devcontainers/base:bullseye
 
 COPY library-scripts/*.sh /tmp/library-scripts/
 
 # [Option] Install zsh
-ARG INSTALL_ZSH="false"
+ARG INSTALL_ZSH="true"
 # [Option] Upgrade OS packages to their latest versions
 ARG UPGRADE_PACKAGES="false"
 
@@ -14,14 +14,14 @@ ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && bash /tmp/library-scripts/common-debian.sh "${INSTALL_ZSH}" "${USERNAME}" "${USER_UID}" "${USER_GID}" "${UPGRADE_PACKAGES}" "true" "true" \
-    && apt-get install -y libssl-dev libffi-dev python3-dev python3-pip sshpass \
+    && apt-get install -y libssl-dev libffi-dev python3-dev python3-pip \
     && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 # Install Ansible
-RUN pip3 install ansible
+RUN pip3 install ansible[azure]
 
 # [Option] Install Azure CLI
-ARG INSTALL_AZURE_CLI="false"
+ARG INSTALL_AZURE_CLI="true"
 # [Option] Install Docker CLI
 ARG INSTALL_DOCKER="true"
 # [Choice] Node.js version: none, lts/*, 16, 14, 12, 10
@@ -42,5 +42,5 @@ ENTRYPOINT [ "/usr/local/share/docker-init.sh" ]
 CMD [ "sleep", "infinity" ]
 
 # [Optional] Uncomment this section to install additional OS packages.
-# RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-#     && apt-get -y install --no-install-recommends <your-package-list-here>
+ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+     && apt-get -y install --no-install-recommends sshpass

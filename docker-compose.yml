@@ -5,6 +5,7 @@ secrets:
     file: /volume1/docker/foundry.secrets.json
 
 services:
+  # TODO: https://kevinquillen.com/setting-traefik-2-local-ssl-certificate
   traefik:
     image: traefik:latest
     container_name: traefik
@@ -25,7 +26,7 @@ services:
       - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
       - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
       - "--log.level=info"
-      - "--entrypoints.https.forwardedHeaders.trustedIPs=173.245.48.0/20,103.21.244.0/22,103.22.200.0/22,103.31.4.0/22,141.101.64.0/18,108.162.192.0/18,190.93.240.0/20,188.114.96.0/20,197.234.240.0/22,198.41.128.0/17,162.158.0.0/15,104.16.0.0/13,104.24.0.0/14,172.64.0.0/13,131.0.72.0/22"
+      - "--entrypoints.websecure.forwardedHeaders.trustedIPs=127.0.0.1/32,173.245.48.0/20,103.21.244.0/22,103.22.200.0/22,103.31.4.0/22,141.101.64.0/18,108.162.192.0/18,190.93.240.0/20,188.114.96.0/20,197.234.240.0/22,198.41.128.0/17,162.158.0.0/15,104.16.0.0/13,104.24.0.0/14,172.64.0.0/13,131.0.72.0/22"
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
@@ -44,20 +45,24 @@ services:
       - /volume1/homes/scott/Source:/home/workspace:cached
     labels:
       - "traefik.enable=true"
-  foundry:
-    image: felddy/foundryvtt:0.8
-    container_name: foundry
+  calibre:
+    image: lscr.io/linuxserver/calibre
+    container_name: calibre
     environment:
-      - CONTAINER_CACHE=/data/container_cache
-      - FOUNDRY_HOME=/home/foundry
-      - FOUNDRY_HOSTNAME=foundry.descention.net
+      - PUID=1026
+      - PGID=100
+      - TZ=America/New_York
+    #  - DOCKER_MODS=linuxserver/calibre-web:calibre
     volumes:
-      - /volume1/docker/foundry-0.8:/data
+      - /volume1/docker/calibre/config:/config
+    #  - /volume1/docker/calibre/books:/books
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    ports:
+      - 8081:8081
     labels:
       - "traefik.enable=true"
-    secrets:
-      - source: foundry_secrets
-        target: config.json
+      - "traefik.http.services.calibre.loadbalancer.server.port=8081" # set port assignment
   cookbook:
     image: hkotel/mealie:latest
     restart: always
@@ -106,12 +111,27 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.git.loadbalancer.server.port=3000" # set port assignment
+  matrix:
+    image: vectorim/element-web:latest
+    container_name: element-web
+    labels:
+      - "traefik.enable=true"
   vault:
     image: vaultwarden/server:latest
     container_name: vaultwarden
     environment:
+      - DOMAIN=https://vault.descention.net
       - SIGNUPS_ALLOWED=false
       - SIGNUPS_VERIFY=true
+      - SMTP_HOST=${VAULT_SMTP_HOST}
+      - SMTP_PORT=465
+      - SMTP_SSL=false
+      - SMTP_EXPLICIT_TLS=true
+      - SMTP_FROM=${VAULT_SMTP_FROM}
+      - SMTP_USERNAME=${VAULT_SMTP_USERNAME}
+      - SMTP_PASSWORD=${VAULT_SMTP_PASSWORD}
+      - SMTP_AUTH_MECHANISM=${VAULT_SMTP_AUTH_MECHANISM}
+      #- ADMIN_TOKEN=${VAULT_ADMIN_TOKEN}
     volumes:
       - /volume1/docker/vaultwarden-server:/data
     labels:
@@ -124,3 +144,23 @@ services:
     environment:
       - WATCHTOWER_CLEANUP=true
       - WATCHTOWER_ROLLING_RESTART=true
+  yacy:
+    image: yacy/yacy_search_server:latest
+    container_name: yacy
+    volumes:
+      - /volume1/docker/yacy:/opt/yacy_search_server/DATA
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.yacy.loadbalancer.server.port=8090" # set port assignment
+    logging:
+      options:
+        max-size: "200m"
+        max-file: "2"
+  cloudflare:
+    image: cloudflare/cloudflared:2021.11.0
+    container_name: cloudflared
+    volumes:
+      - /volume1/docker/cloudflared:/etc/cloudflared
+    command: tunnel --config /etc/cloudflared/config/config.yaml run
+    depends_on:
+      - traefik

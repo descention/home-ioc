@@ -1,15 +1,16 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
-// https://github.com/microsoft/vscode-dev-containers/tree/v0.194.0/containers/azure-ansible
+// https://github.com/microsoft/vscode-dev-containers/tree/main/containers/azure-ansible
 {
 	"name": "Azure Ansible (Community)",
 	"build": {
 		"dockerfile": "Dockerfile",
 		"args": {
 			"INSTALL_AZURE_CLI": "false",
-			"INSTALL_DOCKER": "false",
+			"INSTALL_DOCKER": "true",
 			"NODE_VERSION": "none"
 		}
 	},
+	"runArgs": ["--init"],
 	"mounts": [
 		// [Optional] Anisble Collections: Uncomment if you want to mount your local .ansible/collections folder.
 		// "source=${localEnv:HOME}${localEnv:USERPROFILE}/.ansible/collections,target=/root/.ansible/collections,type=bind,consistency=cached",
