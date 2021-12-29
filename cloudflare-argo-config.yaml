@@ -1,0 +1,6 @@
+tunnel: <tunnel name or ID>
+credentials-file: /etc/cloudflared/<tunnel ID>.json
+ingress:
+  - service: https://<docker host IP>:443
+    originRequest:
+      noTLSVerify: true
