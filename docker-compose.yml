@@ -1,16 +1,19 @@
 version: "2"
 
-secrets:
-  foundry_secrets:
-    file: /volume1/docker/foundry.secrets.json
-
 services:
+  cloudflare:
+    image: cloudflare/cloudflared:2021.11.0
+    container_name: cloudflared
+    volumes:
+      - /volume1/docker/cloudflared:/etc/cloudflared
+    command: tunnel --config /etc/cloudflared/config/config.yaml run
+    depends_on:
+      - traefik
   # TODO: https://kevinquillen.com/setting-traefik-2-local-ssl-certificate
   traefik:
     image: traefik:latest
     container_name: traefik
     command:
-      - "--api.insecure=true"
       - "--providers.docker=true"
       - "--providers.docker.watch=true"
       - "--providers.docker.exposedbydefault=false"
@@ -20,7 +23,6 @@ services:
       - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
       - "--entrypoints.websecure.address=:443"
       - "--entrypoints.websecure.http.tls.certResolver=letsencrypt"
-      - "--entrypoints.traefik.address=:8080"
       - "--certificatesresolvers.letsencrypt.acme.email=scott.mundorff@gmail.com"
       - "--certificatesresolvers.letsencrypt.acme.storage=/srv/acme.json"
       - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
@@ -33,60 +35,9 @@ services:
     ports:
       - 80:80
       - 443:443
-      - 8080:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /volume1/docker/traefik/ssl:/srv
-  code:
-    image: gitpod/openvscode-server:latest
-    container_name: vscode
-    command: --connection-secret /home/workspace/code.secret
-    volumes:
-      - /volume1/homes/scott/Source:/home/workspace:cached
-    labels:
-      - "traefik.enable=true"
-  calibre:
-    image: lscr.io/linuxserver/calibre
-    container_name: calibre
-    environment:
-      - PUID=1026
-      - PGID=100
-      - TZ=America/New_York
-    #  - DOCKER_MODS=linuxserver/calibre-web:calibre
-    volumes:
-      - /volume1/docker/calibre/config:/config
-    #  - /volume1/docker/calibre/books:/books
-      - /etc/localtime:/etc/localtime:ro
-    restart: unless-stopped
-    ports:
-      - 8081:8081
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.calibre.loadbalancer.server.port=8081" # set port assignment
-  cookbook:
-    image: hkotel/mealie:latest
-    restart: always
-    container_name: mealie
-    environment:
-      PUID: 1026
-      PGID: 100
-      TZ: America/New_York
-      # Default Recipe Settings
-      RECIPE_PUBLIC: 'true'
-      RECIPE_SHOW_NUTRITION: 'true'
-      RECIPE_SHOW_ASSETS: 'true'
-      RECIPE_LANDSCAPE_VIEW: 'true'
-      RECIPE_DISABLE_COMMENTS: 'true'
-      RECIPE_DISABLE_AMOUNT: 'false'
-      # Gunicorn
-      WEB_CONCURRENCY: 2
-      # WORKERS_PER_CORE: 0.5
-      MAX_WORKERS: 4
-    volumes:
-      - /volume1/docker/mealie:/app/data
-      - /etc/localtime:/etc/localtime:ro
-    labels:
-      - "traefik.enable=true"
   homebridge:
     image: oznu/homebridge:ubuntu
     restart: always
@@ -99,23 +50,6 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /volume1/docker/homebridge:/homebridge
-  git:
-    image: gitea/gitea:1.15.6
-    container_name: gitea
-    environment:
-      - USER_UID=1026
-      - USER_GID=100
-    volumes:
-      - /volume1/docker/gitea:/data
-      - /etc/localtime:/etc/localtime:ro
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.git.loadbalancer.server.port=3000" # set port assignment
-  matrix:
-    image: vectorim/element-web:latest
-    container_name: element-web
-    labels:
-      - "traefik.enable=true"
   vault:
     image: vaultwarden/server:latest
     container_name: vaultwarden
@@ -136,17 +70,26 @@ services:
       - /volume1/docker/vaultwarden-server:/data
     labels:
       - "traefik.enable=true"
-  watchtower:
-    image: containrrr/watchtower
+  ipfs:
+    image: ipfs/go-ipfs:latest
+    container_name: ipfs
+    command: init --profile=lowpower
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /etc/localtime:/etc/localtime:ro
-    environment:
-      - WATCHTOWER_CLEANUP=true
-      - WATCHTOWER_ROLLING_RESTART=true
+      - /volume1/docker/ipfs/data:/data/ipfs
+      - /volume1/docker/ipfs/staging:/export
+    ports:
+      - 4001:4001/tcp
+      - 4001:4001/udp
+      - 5001:5001
+      - 8999:8080
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.ipfs.loadbalancer.server.port=8999" # set port assignment
   yacy:
     image: yacy/yacy_search_server:latest
     container_name: yacy
+    ports:
+      - 8090:8090
     volumes:
       - /volume1/docker/yacy:/opt/yacy_search_server/DATA
     labels:
@@ -156,11 +99,69 @@ services:
       options:
         max-size: "200m"
         max-file: "2"
-  cloudflare:
-    image: cloudflare/cloudflared:2021.11.0
-    container_name: cloudflared
+
+#  matrix:
+#    image: vectorim/element-web:latest
+#    container_name: element-web
+#    labels:
+#      - "traefik.enable=true"
+# code:
+#   image: gitpod/openvscode-server:latest
+#   container_name: vscode
+#   command: --connection-secret /home/workspace/code.secret
+#   volumes:
+#     - /volume1/homes/scott/Source:/home/workspace:cached
+#   labels:
+#     - "traefik.enable=true"
+# calibre:
+#   image: lscr.io/linuxserver/calibre
+#   container_name: calibre
+#   environment:
+#     - PUID=1026
+#     - PGID=100
+#     - TZ=America/New_York
+#   #  - DOCKER_MODS=linuxserver/calibre-web:calibre
+#   volumes:
+#     - /volume1/docker/calibre/config:/config
+#   #  - /volume1/docker/calibre/books:/books
+#     - /etc/localtime:/etc/localtime:ro
+#   restart: unless-stopped
+#   ports:
+#     - 8081:8081
+#   labels:
+#     - "traefik.enable=true"
+#     - "traefik.http.services.calibre.loadbalancer.server.port=8081" # set port assignment
+#  cookbook:
+#    image: hkotel/mealie:latest
+#    restart: always
+#    container_name: mealie
+#    environment:
+#      PUID: 1026
+#      PGID: 100
+#      TZ: America/New_York
+#      # Default Recipe Settings
+#      RECIPE_PUBLIC: 'true'
+#      RECIPE_SHOW_NUTRITION: 'true'
+#      RECIPE_SHOW_ASSETS: 'true'
+#      RECIPE_LANDSCAPE_VIEW: 'true'
+#      RECIPE_DISABLE_COMMENTS: 'true'
+#      RECIPE_DISABLE_AMOUNT: 'false'
+#      # Gunicorn
+#      WEB_CONCURRENCY: 2
+#      # WORKERS_PER_CORE: 0.5
+#      MAX_WORKERS: 4
+# volumes:
+#   - /volume1/docker/mealie:/app/data
+#   - /etc/localtime:/etc/localtime:ro
+# labels:
+#   - "traefik.enable=true"
+
+  # watchtower to keep containers updated
+  watchtower:
+    image: containrrr/watchtower
     volumes:
-      - /volume1/docker/cloudflared:/etc/cloudflared
-    command: tunnel --config /etc/cloudflared/config/config.yaml run
-    depends_on:
-      - traefik
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_ROLLING_RESTART=true
