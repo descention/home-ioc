@@ -4,6 +4,7 @@ services:
   cloudflare:
     image: cloudflare/cloudflared:2021.11.0
     container_name: cloudflared
+    restart: unless-stopped
     volumes:
       - /volume1/docker/cloudflared:/etc/cloudflared
     command: tunnel --config /etc/cloudflared/config/config.yaml run
@@ -53,6 +54,7 @@ services:
   vault:
     image: vaultwarden/server:latest
     container_name: vaultwarden
+    restart: unless-stopped
     environment:
       - DOMAIN=https://vault.descention.net
       - SIGNUPS_ALLOWED=false
@@ -73,7 +75,8 @@ services:
   ipfs:
     image: ipfs/go-ipfs:latest
     container_name: ipfs
-    command: init --profile=lowpower
+    command: daemon
+    restart: unless-stopped
     volumes:
       - /volume1/docker/ipfs/data:/data/ipfs
       - /volume1/docker/ipfs/staging:/export
@@ -85,20 +88,20 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.ipfs.loadbalancer.server.port=8999" # set port assignment
-  yacy:
-    image: yacy/yacy_search_server:latest
-    container_name: yacy
-    ports:
-      - 8090:8090
-    volumes:
-      - /volume1/docker/yacy:/opt/yacy_search_server/DATA
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.yacy.loadbalancer.server.port=8090" # set port assignment
-    logging:
-      options:
-        max-size: "200m"
-        max-file: "2"
+  # yacy:
+  #   image: yacy/yacy_search_server:latest
+  #   container_name: yacy
+  #   ports:
+  #     - 8090:8090
+  #   volumes:
+  #     - /volume1/docker/yacy:/opt/yacy_search_server/DATA
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.http.services.yacy.loadbalancer.server.port=8090" # set port assignment
+  #   logging:
+  #     options:
+  #       max-size: "200m"
+  #       max-file: "2"
 
 #  matrix:
 #    image: vectorim/element-web:latest
