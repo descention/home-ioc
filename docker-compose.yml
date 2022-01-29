@@ -125,8 +125,6 @@ services:
       - POSTGRES_PASSWORD=odoo
     volumes:
       - /volume1/docker/postgres:/var/lib/postgresql/data
-    ports:
-      - 5432:5432
     networks:
       - internal
   # yacy:
@@ -212,4 +210,3 @@ services:
 networks:
   web: {}
   internal: {}
-    
