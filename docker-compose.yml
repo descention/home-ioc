@@ -88,6 +88,32 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.ipfs.loadbalancer.server.port=8999" # set port assignment
+  
+  odoo:
+    image: odoo:15
+    container_name: odoo
+    environment:
+      - TZ=America/Guayaquil
+      - HOST=postgres
+    volumes:
+      - /volume1/docker/odoo/data:/var/lib/odoo
+      - /volume1/docker/odoo/config:/etc/odoo
+      - /volume1/docker/odoo/addons:/mnt/extra-addons
+    ports:
+      - 8069:8069
+    depends_on:
+      - odoo-db
+  odoo-db:
+    image: postgres:10
+    environment:
+      - TZ=America/Guayaquil
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=odoo
+      - POSTGRES_PASSWORD=odoo
+    volumes:
+      - /volume1/docker/postgres:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
   # yacy:
   #   image: yacy/yacy_search_server:latest
   #   container_name: yacy
