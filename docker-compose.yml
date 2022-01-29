@@ -103,6 +103,8 @@ services:
       - 8069:8069
     depends_on:
       - odoo-db
+    labels:
+      - "traefik.enable=true"
   odoo-db:
     image: postgres:10
     environment:
