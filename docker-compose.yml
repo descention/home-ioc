@@ -93,7 +93,7 @@ services:
     image: odoo:15
     container_name: odoo
     environment:
-      - TZ=America/Guayaquil
+      - TZ=America/New_York
       - HOST=postgres
     volumes:
       - /volume1/docker/odoo/data:/var/lib/odoo
@@ -108,7 +108,7 @@ services:
   odoo-db:
     image: postgres:10
     environment:
-      - TZ=America/Guayaquil
+      - TZ=America/New_York
       - POSTGRES_DB=postgres
       - POSTGRES_USER=odoo
       - POSTGRES_PASSWORD=odoo
