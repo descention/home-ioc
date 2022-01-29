@@ -10,6 +10,8 @@ services:
     command: tunnel --config /etc/cloudflared/config/config.yaml run
     depends_on:
       - traefik
+    networks:
+      - web
   # TODO: https://kevinquillen.com/setting-traefik-2-local-ssl-certificate
   traefik:
     image: traefik:latest
@@ -39,6 +41,8 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /volume1/docker/traefik/ssl:/srv
+    networks:
+      - web
   homebridge:
     image: oznu/homebridge:ubuntu
     restart: always
@@ -70,6 +74,8 @@ services:
       #- ADMIN_TOKEN=${VAULT_ADMIN_TOKEN}
     volumes:
       - /volume1/docker/vaultwarden-server:/data
+    networks:
+      - web
     labels:
       - "traefik.enable=true"
   ipfs:
@@ -85,6 +91,8 @@ services:
       - 4001:4001/udp
       - 5001:5001
       - 8999:8080
+    networks:
+      - web
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.ipfs.loadbalancer.server.port=8999" # set port assignment
@@ -101,6 +109,9 @@ services:
       - /volume1/docker/odoo/addons:/mnt/extra-addons
     ports:
       - 8069:8069
+    networks:
+      - web
+      - internal
     depends_on:
       - odoo-db
     labels:
@@ -116,6 +127,8 @@ services:
       - /volume1/docker/postgres:/var/lib/postgresql/data
     ports:
       - 5432:5432
+    networks:
+      - internal
   # yacy:
   #   image: yacy/yacy_search_server:latest
   #   container_name: yacy
@@ -196,3 +209,7 @@ services:
     environment:
       - WATCHTOWER_CLEANUP=true
       - WATCHTOWER_ROLLING_RESTART=true
+networks:
+  web: {}
+  internal: {}
+    
