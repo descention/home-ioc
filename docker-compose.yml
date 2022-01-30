@@ -102,7 +102,7 @@ services:
     container_name: odoo
     environment:
       - TZ=America/New_York
-      - HOST=postgres
+      - HOST=odoo-db
     volumes:
       - /volume1/docker/odoo/data:/var/lib/odoo
       - /volume1/docker/odoo/config:/etc/odoo
@@ -118,6 +118,7 @@ services:
       - "traefik.enable=true"
   odoo-db:
     image: postgres:10
+    container_name: odoo-db
     environment:
       - TZ=America/New_York
       - POSTGRES_DB=postgres
