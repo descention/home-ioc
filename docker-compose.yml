@@ -12,6 +12,8 @@ services:
       - traefik
     networks:
       - web
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   # TODO: https://kevinquillen.com/setting-traefik-2-local-ssl-certificate
   traefik:
     image: traefik:latest
