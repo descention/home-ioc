@@ -80,56 +80,65 @@ services:
       - web
     labels:
       - "traefik.enable=true"
-  ipfs:
-    image: ipfs/go-ipfs:latest
-    container_name: ipfs
-    command: daemon
+  rancher:
+    image: rancher/rancher:latest
+    container_name: rancher
     restart: unless-stopped
-    volumes:
-      - /volume1/docker/ipfs/data:/data/ipfs
-      - /volume1/docker/ipfs/staging:/export
     ports:
-      - 4001:4001/tcp
-      - 4001:4001/udp
-      - 5001:5001
-      - 8999:8080
-    networks:
-      - web
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.ipfs.loadbalancer.server.port=8999" # set port assignment
+      - '80:80'
+    volumes:
+      - rancher-vol:/var/lib/rancher
+    command: --no-cacerts
+  # ipfs:
+  #   image: ipfs/go-ipfs:latest
+  #   container_name: ipfs
+  #   command: daemon
+  #   restart: unless-stopped
+  #   volumes:
+  #     - /volume1/docker/ipfs/data:/data/ipfs
+  #     - /volume1/docker/ipfs/staging:/export
+  #   ports:
+  #     - 4001:4001/tcp
+  #     - 4001:4001/udp
+  #     - 5001:5001
+  #     - 8999:8080
+  #   networks:
+  #     - web
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.http.services.ipfs.loadbalancer.server.port=8999" # set port assignment
   
-  odoo:
-    image: odoo:15
-    container_name: odoo
-    environment:
-      - TZ=America/New_York
-      - HOST=odoo-db
-    volumes:
-      - /volume1/docker/odoo/data:/var/lib/odoo
-      - /volume1/docker/odoo/config:/etc/odoo
-      - /volume1/docker/odoo/addons:/mnt/extra-addons
-    ports:
-      - 8069:8069
-    networks:
-      - web
-      - internal
-    depends_on:
-      - odoo-db
-    labels:
-      - "traefik.enable=true"
-  odoo-db:
-    image: postgres:10
-    container_name: odoo-db
-    environment:
-      - TZ=America/New_York
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=odoo
-      - POSTGRES_PASSWORD=odoo
-    volumes:
-      - /volume1/docker/postgres:/var/lib/postgresql/data
-    networks:
-      - internal
+  # odoo:
+  #   image: odoo:15
+  #   container_name: odoo
+  #   environment:
+  #     - TZ=America/New_York
+  #     - HOST=odoo-db
+  #   volumes:
+  #     - /volume1/docker/odoo/data:/var/lib/odoo
+  #     - /volume1/docker/odoo/config:/etc/odoo
+  #     - /volume1/docker/odoo/addons:/mnt/extra-addons
+  #   ports:
+  #     - 8069:8069
+  #   networks:
+  #     - web
+  #     - internal
+  #   depends_on:
+  #     - odoo-db
+  #   labels:
+  #     - "traefik.enable=true"
+  # odoo-db:
+  #   image: postgres:10
+  #   container_name: odoo-db
+  #   environment:
+  #     - TZ=America/New_York
+  #     - POSTGRES_DB=postgres
+  #     - POSTGRES_USER=odoo
+  #     - POSTGRES_PASSWORD=odoo
+  #   volumes:
+  #     - /volume1/docker/postgres:/var/lib/postgresql/data
+  #   networks:
+  #     - internal
   # yacy:
   #   image: yacy/yacy_search_server:latest
   #   container_name: yacy
@@ -213,3 +222,5 @@ services:
 networks:
   web: {}
   internal: {}
+volumes:
+  rancher-vol:
