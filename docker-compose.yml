@@ -221,6 +221,5 @@ services:
       - WATCHTOWER_ROLLING_RESTART=true
 networks:
   web: {}
-  internal: {}
 volumes:
   rancher-vol:
