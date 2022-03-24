@@ -85,7 +85,7 @@ services:
     container_name: rancher
     restart: unless-stopped
     ports:
-      - '80:80'
+      - '8888:80'
     volumes:
       - rancher-vol:/var/lib/rancher
     command: --no-cacerts
