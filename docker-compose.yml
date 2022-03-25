@@ -86,10 +86,9 @@ services:
     privileged: true
     restart: unless-stopped
     ports:
-      - '8888:80'
+      - '8889:443'
     volumes:
       - rancher-vol:/var/lib/rancher
-    command: --no-cacerts
   # ipfs:
   #   image: ipfs/go-ipfs:latest
   #   container_name: ipfs
