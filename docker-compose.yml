@@ -80,15 +80,17 @@ services:
       - web
     labels:
       - "traefik.enable=true"
-  rancher:
-    image: rancher/rancher:latest
-    container_name: rancher
-    privileged: true
-    restart: unless-stopped
-    ports:
-      - '8889:443'
-    volumes:
-      - rancher-vol:/var/lib/rancher
+
+  
+  # rancher:
+  #   image: rancher/rancher:latest
+  #   container_name: rancher
+  #   privileged: true
+  #   restart: unless-stopped
+  #   ports:
+  #     - '8889:443'
+  #   volumes:
+  #     - rancher-vol:/var/lib/rancher
   # ipfs:
   #   image: ipfs/go-ipfs:latest
   #   container_name: ipfs
