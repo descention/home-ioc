@@ -80,7 +80,29 @@ services:
       - web
     labels:
       - "traefik.enable=true"
-
+  transcode:
+    container_name: tdarr
+    image: ghcr.io/haveagitgat/tdarr:latest
+    restart: unless-stopped
+    network_mode: bridge
+    ports:
+      - 8265:8265 # webUI port
+      - 8266:8266 # server port
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - UMASK_SET=002
+      - serverIP=0.0.0.0
+      - serverPort=8266
+      - webUIPort=8265
+      - internalNode=false
+    volumes:
+      - /volume1/docker/tdarr/server:/app/server
+      - /volume1/docker/tdarr/configs:/app/configs
+      - /volume1/docker/tdarr/logs:/app/logs
+      - /media:/media
+      - /transcode_cache:/temp
+      - /etc/localtime:/etc/localtime:ro
   
   # rancher:
   #   image: rancher/rancher:latest
