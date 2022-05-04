@@ -101,7 +101,6 @@ services:
       - /volume1/docker/tdarr/configs:/app/configs
       - /volume1/docker/tdarr/logs:/app/logs
       - /var/services/homes/scott/usbx:/media
-      - /transcode_cache:/temp
       - /etc/localtime:/etc/localtime:ro
   
   # rancher:
