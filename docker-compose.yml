@@ -6,7 +6,7 @@ services:
     container_name: cloudflared
     restart: unless-stopped
     volumes:
-      - ${HOME}/cloudflared:/etc/cloudflared
+      - ${BASE_DIR}/cloudflared:/etc/cloudflared
     command: tunnel --config /etc/cloudflared/config/config.yaml run
     depends_on:
       - traefik
@@ -42,7 +42,7 @@ services:
       - 443:443
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ${HOME}/traefik/ssl:/srv
+      - ${BASE_DIR}/traefik/ssl:/srv
     networks:
       - web
   homebridge:
@@ -56,7 +56,7 @@ services:
       - HOMEBRIDGE_CONFIG_UI_PORT=8581
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${HOME}/homebridge:/homebridge
+      - ${BASE_DIR}/homebridge:/homebridge
   vault:
     image: vaultwarden/server:latest
     container_name: vaultwarden
@@ -75,7 +75,7 @@ services:
       - SMTP_AUTH_MECHANISM=${VAULT_SMTP_AUTH_MECHANISM}
       #- ADMIN_TOKEN=${VAULT_ADMIN_TOKEN}
     volumes:
-      - ${HOME}/vaultwarden-server:/data
+      - ${BASE_DIR}/vaultwarden-server:/data
     networks:
       - web
     labels:
@@ -88,11 +88,11 @@ services:
       - PLUGIN_KEYS="{'Tensorflow':'${TENSORFLOW_PLUGIN_KEY}''}"
       - SSL_ENABLED=false
     volumes:
-      - ${HOME}/Shinobi/config:/config
-      - ${HOME}/Shinobi/customAutoLoad:/home/Shinobi/libs/customAutoLoad
-      - ${HOME}/Shinobi/database:/var/lib/mysql
-      - ${HOME}/Shinobi/videos:/home/Shinobi/videos
-      - ${HOME}/Shinobi/plugins:/home/Shinobi/plugins
+      - ${BASE_DIR}/Shinobi/config:/config
+      - ${BASE_DIR}/Shinobi/customAutoLoad:/home/Shinobi/libs/customAutoLoad
+      - ${BASE_DIR}/Shinobi/database:/var/lib/mysql
+      - ${BASE_DIR}/Shinobi/videos:/home/Shinobi/videos
+      - ${BASE_DIR}/Shinobi/plugins:/home/Shinobi/plugins
       - /dev/shm/Shinobi/streams:/dev/shm/streams
       - /etc/localtime:/etc/localtime:ro
     ports:
@@ -105,7 +105,7 @@ services:
       - PLUGIN_KEY=${TENSORFLOW_PLUGIN_KEY}
       - PLUGIN_HOST=Shinobi
     volumes:
-      - ${HOME}/Shinobi/docker-plugins/tensorflow:/config
+      - ${BASE_DIR}/Shinobi/docker-plugins/tensorflow:/config
     restart: unless-stopped
 
   # transcode:
@@ -125,9 +125,9 @@ services:
   #     - webUIPort=8265
   #     - internalNode=false
   #   volumes:
-  #     - ${HOME}/tdarr/server:/app/server
-  #     - ${HOME}/tdarr/configs:/app/configs
-  #     - ${HOME}/tdarr/logs:/app/logs
+  #     - ${BASE_DIR}/tdarr/server:/app/server
+  #     - ${BASE_DIR}/tdarr/configs:/app/configs
+  #     - ${BASE_DIR}/tdarr/logs:/app/logs
   #     - /var/services/homes/scott/usbx:/media
   #     - /etc/localtime:/etc/localtime:ro
   
@@ -146,8 +146,8 @@ services:
   #   command: daemon
   #   restart: unless-stopped
   #   volumes:
-  #     - ${HOME}/ipfs/data:/data/ipfs
-  #     - ${HOME}/ipfs/staging:/export
+  #     - ${BASE_DIR}/ipfs/data:/data/ipfs
+  #     - ${BASE_DIR}/ipfs/staging:/export
   #   ports:
   #     - 4001:4001/tcp
   #     - 4001:4001/udp
@@ -166,9 +166,9 @@ services:
   #     - TZ=America/New_York
   #     - HOST=odoo-db
   #   volumes:
-  #     - ${HOME}/odoo/data:/var/lib/odoo
-  #     - ${HOME}/odoo/config:/etc/odoo
-  #     - ${HOME}/odoo/addons:/mnt/extra-addons
+  #     - ${BASE_DIR}/odoo/data:/var/lib/odoo
+  #     - ${BASE_DIR}/odoo/config:/etc/odoo
+  #     - ${BASE_DIR}/odoo/addons:/mnt/extra-addons
   #   ports:
   #     - 8069:8069
   #   networks:
@@ -187,7 +187,7 @@ services:
   #     - POSTGRES_USER=odoo
   #     - POSTGRES_PASSWORD=odoo
   #   volumes:
-  #     - ${HOME}/postgres:/var/lib/postgresql/data
+  #     - ${BASE_DIR}/postgres:/var/lib/postgresql/data
   #   networks:
   #     - internal
   # yacy:
@@ -196,7 +196,7 @@ services:
   #   ports:
   #     - 8090:8090
   #   volumes:
-  #     - ${HOME}/yacy:/opt/yacy_search_server/DATA
+  #     - ${BASE_DIR}/yacy:/opt/yacy_search_server/DATA
   #   labels:
   #     - "traefik.enable=true"
   #     - "traefik.http.services.yacy.loadbalancer.server.port=8090" # set port assignment
@@ -215,7 +215,7 @@ services:
 #   container_name: vscode
 #   command: --connection-secret /home/workspace/code.secret
 #   volumes:
-#     - ${HOME}/scott/Source:/home/workspace:cached
+#     - ${BASE_DIR}/scott/Source:/home/workspace:cached
 #   labels:
 #     - "traefik.enable=true"
 # calibre:
@@ -227,8 +227,8 @@ services:
 #     - TZ=America/New_York
 #   #  - DOCKER_MODS=linuxserver/calibre-web:calibre
 #   volumes:
-#     - ${HOME}/calibre/config:/config
-#   #  - ${HOME}/calibre/books:/books
+#     - ${BASE_DIR}/calibre/config:/config
+#   #  - ${BASE_DIR}/calibre/books:/books
 #     - /etc/localtime:/etc/localtime:ro
 #   restart: unless-stopped
 #   ports:
@@ -256,7 +256,7 @@ services:
 #      # WORKERS_PER_CORE: 0.5
 #      MAX_WORKERS: 4
 # volumes:
-#   - ${HOME}/mealie:/app/data
+#   - ${BASE_DIR}/mealie:/app/data
 #   - /etc/localtime:/etc/localtime:ro
 # labels:
 #   - "traefik.enable=true"
