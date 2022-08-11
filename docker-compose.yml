@@ -81,32 +81,32 @@ services:
     labels:
       - "traefik.enable=true"
 
-  shinobi:
-    image: shinobisystems/shinobi:dev
-    container_name: Shinobi
-    environment:
-      - PLUGIN_KEYS="{'Tensorflow':'${TENSORFLOW_PLUGIN_KEY}''}"
-      - SSL_ENABLED=false
-    volumes:
-      - ${BASE_DIR}/Shinobi/config:/config
-      - ${BASE_DIR}/Shinobi/customAutoLoad:/home/Shinobi/libs/customAutoLoad
-      - ${BASE_DIR}/Shinobi/database:/var/lib/mysql
-      - ${BASE_DIR}/Shinobi/videos:/home/Shinobi/videos
-      - ${BASE_DIR}/Shinobi/plugins:/home/Shinobi/plugins
-      - /dev/shm/Shinobi/streams:/dev/shm/streams
-      - /etc/localtime:/etc/localtime:ro
-    ports:
-      - 9123:8080
-    restart: unless-stopped
-  shinobiplugintensorflow:
-    image: shinobisystems/shinobi-tensorflow:latest
-    container_name: shinobi-tensorflow
-    environment:
-      - PLUGIN_KEY=${TENSORFLOW_PLUGIN_KEY}
-      - PLUGIN_HOST=Shinobi
-    volumes:
-      - ${BASE_DIR}/Shinobi/docker-plugins/tensorflow:/config
-    restart: unless-stopped
+  #shinobi:
+  #  image: shinobisystems/shinobi:dev
+  #  container_name: Shinobi
+  #  environment:
+  #    - PLUGIN_KEYS="{'Tensorflow':'${TENSORFLOW_PLUGIN_KEY}''}"
+  #    - SSL_ENABLED=false
+  #  volumes:
+  #    - ${BASE_DIR}/Shinobi/config:/config
+  #    - ${BASE_DIR}/Shinobi/customAutoLoad:/home/Shinobi/libs/customAutoLoad
+  #    - ${BASE_DIR}/Shinobi/database:/var/lib/mysql
+  #    - ${BASE_DIR}/Shinobi/videos:/home/Shinobi/videos
+  #    - ${BASE_DIR}/Shinobi/plugins:/home/Shinobi/plugins
+  #    - /dev/shm/Shinobi/streams:/dev/shm/streams
+  #    - /etc/localtime:/etc/localtime:ro
+  #  ports:
+  #    - 9123:8080
+  #  restart: unless-stopped
+  #shinobiplugintensorflow:
+  #  image: shinobisystems/shinobi-tensorflow:latest
+  #  container_name: shinobi-tensorflow
+  #  environment:
+  #    - PLUGIN_KEY=${TENSORFLOW_PLUGIN_KEY}
+  #    - PLUGIN_HOST=Shinobi
+  #  volumes:
+  #    - ${BASE_DIR}/Shinobi/docker-plugins/tensorflow:/config
+  #  restart: unless-stopped
 
   # transcode:
   #   container_name: tdarr
