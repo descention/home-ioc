@@ -259,3 +259,4 @@ services:
       - WATCHTOWER_POLL_INTERVAL=7200 # checks for updates every two hours
 networks:
   web: {}
+  internal: {}
