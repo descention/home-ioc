@@ -183,13 +183,14 @@ services:
       - internal
   monica:
     image: monica
+    container_name: monica
     depends_on:
       - monica_db
     ports:
       - 80
     environment:
       - APP_KEY=${MONICA_APP_KEY}
-      - DB_HOST=monica_db
+      - DB_HOST=monicadb
       - DB_USERNAME=usermonica
       - DB_PASSWORD=${MONICA_MYSQL_PASSWORD}
     volumes:
@@ -202,6 +203,7 @@ services:
       - "traefik.enable=true"
   monica_db:
     image: mysql:5.7
+    container_name: monicadb
     environment:
       - MYSQL_RANDOM_ROOT_PASSWORD=true
       - MYSQL_DATABASE=monica
