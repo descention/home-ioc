@@ -183,7 +183,6 @@ services:
       - internal
   monica:
     image: monica
-    container_name: monica
     depends_on:
       - monicadb
     ports:
@@ -203,7 +202,6 @@ services:
       - "traefik.enable=true"
   monicadb:
     image: mysql:5.7
-    container_name: monicadb
     environment:
       - MYSQL_RANDOM_ROOT_PASSWORD=true
       - MYSQL_DATABASE=monica
