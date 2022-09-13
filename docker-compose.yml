@@ -188,28 +188,29 @@ services:
     ports:
       - 80
     environment:
-      - APP_KEY=${MONICA_APP_KEY}
-      - DB_HOST=monicadb
-      - DB_USERNAME=usermonica
-      - DB_PASSWORD=${MONICA_MYSQL_PASSWORD}
+      APP_KEY: "${MONICA_APP_KEY}"
+      DB_HOST: "monicadb:3306"
+      DB_USERNAME: "usermonica"
+      DB_PASSWORD: "${MONICA_MYSQL_PASSWORD}"
     volumes:
       - ${BASE_DIR}/monica/data:/var/www/html/storage
-    restart: always
+    restart: unless-stopped
     networks:
       - web
       - internal
     labels:
       - "traefik.enable=true"
   monicadb:
-    image: mysql:5.7
+    image: mariadb:10.8
     environment:
-      - MYSQL_RANDOM_ROOT_PASSWORD=true
-      - MYSQL_DATABASE=monica
-      - MYSQL_USER=usermonica
-      - MYSQL_PASSWORD=${MONICA_MYSQL_PASSWORD}
+      MARIADB_AUTO_UPGRADE: "1"
+      MARIADB_ROOT_PASSWORD: "${MARIA_DB_PASS}"
+      MARIADB_DATABASE: "monica"
+      MARIADB_USER: "usermonica"
+      MARIADB_PASSWORD: "${MONICA_MYSQL_PASSWORD}"
     volumes:
       - ${BASE_DIR}/monica/db:/var/lib/mysql
-    restart: always
+    restart: unless-stopped
     networks:
       - internal
       
