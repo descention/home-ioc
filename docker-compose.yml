@@ -209,7 +209,7 @@ services:
       MARIADB_DATABASE: "monica"
       MARIADB_USER: "usermonica"
       MARIADB_PASSWORD: "${MONICA_MYSQL_PASSWORD}"
-    command: mysqld --innodb-buffer-pool-size=512M --transaction-isolation=READ-COMMITTED --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --max-connections=512 --innodb-rollback-on-timeout=OFF --innodb-lock-wait-timeout=120
+    command: mysqld --innodb-buffer-pool-size=512M --transaction-isolation=READ-COMMITTED --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --max-connections=512 --innodb-rollback-on-timeout=OFF --innodb-lock-wait-timeout=120 --innodb_default_row_format=dynamic --innodb_file_format=Barracuda --innodb_large_prefix=1
     volumes:
       - ${BASE_DIR}/monica/db:/var/lib/mysql
     restart: unless-stopped
