@@ -185,7 +185,7 @@ services:
     image: monica
     container_name: monica
     depends_on:
-      - monica_db
+      - monicadb
     ports:
       - 80
     environment:
@@ -201,7 +201,7 @@ services:
       - internal
     labels:
       - "traefik.enable=true"
-  monica_db:
+  monicadb:
     image: mysql:5.7
     container_name: monicadb
     environment:
