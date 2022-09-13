@@ -204,10 +204,12 @@ services:
     image: mariadb:10.8
     environment:
       MARIADB_AUTO_UPGRADE: "1"
+      MARIADB_INITDB_SKIP_TZINFO: "1"
       MARIADB_ROOT_PASSWORD: "${MARIA_DB_PASS}"
       MARIADB_DATABASE: "monica"
       MARIADB_USER: "usermonica"
       MARIADB_PASSWORD: "${MONICA_MYSQL_PASSWORD}"
+    command: mysqld --innodb-buffer-pool-size=512M --transaction-isolation=READ-COMMITTED --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --max-connections=512 --innodb-rollback-on-timeout=OFF --innodb-lock-wait-timeout=120
     volumes:
       - ${BASE_DIR}/monica/db:/var/lib/mysql
     restart: unless-stopped
