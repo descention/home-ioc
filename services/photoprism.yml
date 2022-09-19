@@ -1,4 +1,4 @@
-version: '2.3'
+version: '2.4'
 services:
   photos:
     ## Use photoprism/photoprism:preview for testing preview builds:
