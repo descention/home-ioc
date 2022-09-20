@@ -85,6 +85,11 @@ services:
       file: services/photoprism.yml
       service: mariadb
 
+  resilio:
+    extends:
+      file: services/resilio.yml
+      service: resilio-sync
+      
   # watchtower to keep containers updated
   watchtower:
     image: containrrr/watchtower
