@@ -1,4 +1,4 @@
-version: "2.1"
+version: "2.4"
 services:
   resilio-sync:
     image: lscr.io/linuxserver/resilio-sync:latest
@@ -8,8 +8,8 @@ services:
       - PGID=${PGID}
     volumes:
       - ${BASE_DIR}/resilio/config:/config
-      - ${DOWNLOAD_DIR}/resilio/downloads:/downloads
-      - ${DOWNLOAD_DIR}/resilio/sync:/sync
+      - ${BASE_DIR}/resilio/downloads:/downloads
+      - ${BASE_DIR}/resilio/sync:/sync
     ports:
       - 8888:8888
       - 55555:55555
