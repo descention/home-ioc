@@ -46,6 +46,11 @@ services:
     networks:
       - web
   
+  archivebox:
+    extends:
+      file: services/archivebox.yml
+      service: archivebox
+
   homebridge:
     extends:
       file: services/homebridge.yml
