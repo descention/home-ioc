@@ -46,6 +46,16 @@ services:
     networks:
       - web
   
+  monica:
+    extends:
+      file: services/monica.yml
+      service: monica
+      
+  monicadb:
+    extends:
+      file: services/monica.yml
+      service: monicadb
+
   archivebox:
     extends:
       file: services/archivebox.yml
