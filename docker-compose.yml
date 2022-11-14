@@ -80,11 +80,6 @@ services:
     labels:
       - "traefik.enable=true"
 
-  iit:
-    extends:
-      file: services/ink-in-time.yml
-      service: iit
-
   photos:
     extends:
       file: services/photoprism.yml
@@ -94,6 +89,11 @@ services:
     extends:
       file: services/photoprism.yml
       service: mariadb
+
+  hass:
+    extends:
+      file: services/home-assistant.yml
+      service: hass
 
   resilio:
     extends:
