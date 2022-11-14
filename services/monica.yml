@@ -7,7 +7,7 @@ services:
     ports:
       - 80
     environment:
-      APP_ENV=production
+      APP_ENV: "production"
       APP_KEY: "${MONICA_APP_KEY}"
       DB_HOST: "monicadb:3306"
       DB_USERNAME: "usermonica"
