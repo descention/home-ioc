@@ -9,6 +9,7 @@ services:
     volumes:
       - ${BASE_DIR}/resilio/config:/config
       - ${BASE_DIR}/resilio/downloads:/downloads
+      - ${BASE_DIR}/resilio/sync:/sync
       - ${SEEDBOX_FILES}/files:/sync/seedbox-files
     ports:
       - 8888:8888

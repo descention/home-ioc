@@ -45,16 +45,6 @@ services:
       - ${BASE_DIR}/traefik/ssl:/srv
     networks:
       - web
-  
-  monica:
-    extends:
-      file: services/monica.yml
-      service: monica
-      
-  monicadb:
-    extends:
-      file: services/monica.yml
-      service: monicadb
 
   archivebox:
     extends:
