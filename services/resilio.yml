@@ -10,7 +10,7 @@ services:
       - ${BASE_DIR}/resilio/config:/config
       - ${BASE_DIR}/resilio/downloads:/downloads
       - ${BASE_DIR}/resilio/sync:/sync
-      - ${SEEDBOX_FILES}:/opt/files
+      - ${SEEDBOX_FILES}:/sync/seedbox-files
     ports:
       - 8888:8888
       - 55555:55555
