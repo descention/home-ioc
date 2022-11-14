@@ -8,3 +8,5 @@ services:
       - ${BASE_DIR}/ink-in-time/iit.yml:/app/iit.yml
     ports:
       - 5000 # exposes the port to the host
+    labels:
+      - "traefik.enable=true"
