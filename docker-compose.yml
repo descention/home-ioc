@@ -80,6 +80,11 @@ services:
     labels:
       - "traefik.enable=true"
 
+  iit:
+    extends:
+      file: services/ink-in-time.yml
+      service: iit
+
   photos:
     extends:
       file: services/photoprism.yml
