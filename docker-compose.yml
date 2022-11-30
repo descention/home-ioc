@@ -59,6 +59,11 @@ services:
       file: services/homebridge.yml
       service: homebridge
   
+  yacy:
+    extends:
+      file: services/yacy.yml
+      service: yacy
+
   vault:
     image: vaultwarden/server:latest
     container_name: vaultwarden

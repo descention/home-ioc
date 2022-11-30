@@ -1,4 +1,4 @@
-version: '3.0'
+version: '2.4'
 services:
   yacy:
     image: yacy/yacy_search_server:latest
@@ -12,5 +12,5 @@ services:
       - "traefik.http.services.yacy.loadbalancer.server.port=8090" # set port assignment
     logging:
       options:
-        max-size: "200m"
+        max-size: "100m"
         max-file: "2"
