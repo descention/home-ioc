@@ -1,0 +1,21 @@
+version: "2.4"
+services:
+  easyappointments-db:
+    image: mariadb:latest
+    container_name: easyappointments-db
+    volumes:
+        - ${BASE_DIR}/easyappointments/mysql:/var/lib/mysql
+    environment:
+        - MYSQL_ROOT_PASSWORD=root
+        - MYSQL_DATABASE=easyappointments
+
+  easyappointments:
+    image: jamrizzi/easyappointments:latest
+    environment:
+      DB_NAME: easyappointments
+      DB_PASSWORD: hellodocker
+      BASE_URL: http://localhost:8888
+    ports:
+        - 80
+    depends:
+      - easyappointments-db

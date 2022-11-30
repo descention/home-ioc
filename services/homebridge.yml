@@ -1,0 +1,14 @@
+version: '2.4'
+services:
+  homebridge:
+    image: oznu/homebridge:ubuntu
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - PGID=${PGID}
+      - PUID=${PUID}
+      - HOMEBRIDGE_CONFIG_UI=1
+      - HOMEBRIDGE_CONFIG_UI_PORT=8581
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${BASE_DIR}/homebridge:/homebridge

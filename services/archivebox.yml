@@ -1,0 +1,13 @@
+version: '2.4'
+services:
+  archivebox:
+    image: archivebox/archivebox:latest
+    container_name: archivebox
+    restart: unless-stopped
+    ports:
+      - 8000:8000
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+    volumes:
+      - ${BASE_DIR}/archivebox:/data

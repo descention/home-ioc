@@ -1,0 +1,26 @@
+version: '3.0'
+services:
+  cookbook:
+    image: hkotel/mealie:latest
+    restart: always
+    container_name: mealie
+    environment:
+      PUID: 1026
+      PGID: 100
+      TZ: America/New_York
+      # Default Recipe Settings
+      RECIPE_PUBLIC: 'true'
+      RECIPE_SHOW_NUTRITION: 'true'
+      RECIPE_SHOW_ASSETS: 'true'
+      RECIPE_LANDSCAPE_VIEW: 'true'
+      RECIPE_DISABLE_COMMENTS: 'true'
+      RECIPE_DISABLE_AMOUNT: 'false'
+      # Gunicorn
+      WEB_CONCURRENCY: 2
+      # WORKERS_PER_CORE: 0.5
+      MAX_WORKERS: 4
+    volumes:
+      - ${BASE_DIR}/mealie:/app/data
+      - /etc/localtime:/etc/localtime:ro
+    labels:
+      - "traefik.enable=true"
