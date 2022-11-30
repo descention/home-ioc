@@ -76,6 +76,7 @@ services:
       - internal
     labels:
       - "traefik.enable=true"
+      - "traefik.http.services.photos.loadbalancer.server.port=23042" # set port assignment
 
   ## Database Server (recommended)
   ## see https://docs.photoprism.app/getting-started/faq/#should-i-use-sqlite-mariadb-or-mysql
