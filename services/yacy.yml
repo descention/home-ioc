@@ -10,6 +10,8 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.yacy.loadbalancer.server.port=8090" # set port assignment
+    networks:
+      - web
     logging:
       options:
         max-size: "100m"
