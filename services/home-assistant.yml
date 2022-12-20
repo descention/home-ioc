@@ -11,3 +11,4 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
+      - "traefik.http.services.hass.loadbalancer.server.port=8123" # set port assignment
