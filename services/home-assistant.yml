@@ -9,3 +9,5 @@ services:
     privileged: true
     network_mode: host
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
