@@ -1,0 +1,12 @@
+version: '2.4'
+
+services:
+  iit:
+    image: damngoodtech/ink-in-time:latest
+    # This is required to provide a configuration
+    volumes:
+      - ${BASE_DIR}/ink-in-time/iit.yml:/app/iit.yml
+    ports:
+      - 5000 # exposes the port to the host
+    labels:
+      - "traefik.enable=true"

@@ -1,0 +1,14 @@
+version: '2.4'
+
+services:
+  hass:
+    image: ghcr.io/home-assistant/home-assistant:stable
+    volumes:
+      - ${BASE_DIR}/home-assistant:/config
+      - /etc/localtime:/etc/localtime:ro
+    privileged: true
+    network_mode: host
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.hass.loadbalancer.server.port=8123" # set port assignment

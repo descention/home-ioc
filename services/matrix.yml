@@ -1,0 +1,7 @@
+version: '3.0'
+services:
+  matrix:
+    image: vectorim/element-web:latest
+    container_name: element-web
+    labels:
+      - "traefik.enable=true"
