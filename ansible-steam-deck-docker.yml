@@ -1,0 +1,52 @@
+- name: Rootless Containers
+  hosts: localhost
+  tasks:
+    - name: sshd service
+      become: true
+      systemd:
+        name: sshd
+        state: started
+        enabled: yes
+
+    - name: Login
+      ansible.builtin.assert:
+        that:
+          - lookup('ansible.builtin.env', 'XDG_RUNTIME_DIR') == '/run/user/1000'
+    
+    - name: Get current user's UID
+      command: id -u {{ ansible_user_id }}
+      register: uid
+      changed_when: false
+      no_log: true
+
+    - name: Generate /etc/subuid lines for current user
+      become: true
+      lineinfile:
+        path: /etc/subuid
+        line: "{{ lookup('env','USER') }}:{{ uid.stdout }}00000:65536"
+        create: yes
+    - name: Generate /etc/subgid lines for current user
+      become: true
+      lineinfile:
+        path: /etc/subgid
+        line: "{{ lookup('env','USER') }}:{{ uid.stdout }}00000:65536"
+        create: yes
+
+    - name: kernel mods
+      become: true
+      lineinfile:
+        path: /etc/sysctl.d/rootless-docker.conf
+        line: kernel.unprivileged_userns_clone=1
+        create: yes
+
+    - name: Download file
+      ansible.builtin.get_url:
+        url: http://get.docker.com/rootless
+        dest: /tmp/rootless-docker.sh
+    - name: Install rootless docker
+      ansible.builtin.script: /tmp/rootless-docker.sh
+      args:
+        executable: sh
+
+# set export DOCKER_HOST=unix:///run/user/$(id -u $USER)/docker.sock
+# set export PATH=$HOME/bin:$PATH
